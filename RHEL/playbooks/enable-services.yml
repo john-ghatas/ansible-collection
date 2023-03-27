@@ -3,11 +3,12 @@
   hosts: targets
   become: true
   tasks:
-    - name: Enable nginx and start it
-      service:
+    - name: Enable nginx and cockpit and start the services
+      systemd:
         name: "{{ item }}"
-        enabled: yes
+        enabled: true
         state: started
       loop:
         - nginx
         - cockpit
+        - cockpit.socket
