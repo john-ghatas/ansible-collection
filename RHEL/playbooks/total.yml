@@ -1,2 +1,5 @@
 ---
-# - import_playbook: ./packages/packages.yml
+- import_playbook: install-packages.yml
+- import_playbook: firewall-rules.yml
+- import_playbook: enable-services.yml
+- import_playbook: post-steps.yml

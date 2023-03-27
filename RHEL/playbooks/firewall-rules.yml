@@ -1,0 +1,20 @@
+---
+- name: "Set the firewall rules"
+  hosts: targets
+  become: true
+  tasks:
+    - name: Allow https and http traffic
+      firewalld:
+        zone: public
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop:
+        - http
+        - https
+        - cockpit
+
+    - name: Reload firewalld
+      systemd:
+        name: firewalld
+        state: reloaded

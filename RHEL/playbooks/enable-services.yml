@@ -1,0 +1,13 @@
+---
+- name: "Enable the needed services"
+  hosts: targets
+  become: true
+  tasks:
+    - name: Enable nginx and start it
+      service:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      loop:
+        - nginx
+        - cockpit

@@ -1,0 +1,6 @@
+---
+- name: "Post configuration steps that are needed"
+  hosts: targets
+  become: true
+  # tasks:
+  #   - name: Allow https and http traffic

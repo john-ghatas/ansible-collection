@@ -1,2 +1,11 @@
 ---
+- name: Print linux distribution and version
+  hosts: all
+  tasks:
+    - name: Running the playbook on the following OS
+      debug:
+        msg:
+          - "{{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+        
 - import_playbook: playbooks/total.yml
+  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux', 'Rocky', 'Alma']

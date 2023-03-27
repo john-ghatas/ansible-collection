@@ -1,0 +1,37 @@
+---
+- name: "Install packages on all server and setup basic configuration"
+  hosts: targets
+  become: true
+  tasks:
+    - name: Enable the EPEL repository
+      dnf:
+        name:
+          - epel-release
+        state: present
+        update_cache: true
+    
+    - name: Yum update the system
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Ensure packages are installed
+      dnf:
+        name:
+          - ansible
+          - neofetch
+          - git
+          - vim
+          - zsh
+          - nginx
+          - cockpit
+          - neovim
+          - mlocate
+        state: present
+        update_cache: true
+
+    - name: Enable nginx and start it
+      service:
+        name: nginx
+        enabled: yes
+        state: started
