@@ -29,11 +29,22 @@
           - neovim
           - mlocate
           - fail2ban
+          - htop
+          - podman-docker
+          - jq
+          - wget
         state: present
         update_cache: true
 
-    - name: Enable nginx and start it
-      service:
-        name: nginx
-        enabled: yes
-        state: started
+    - name: Get the latest docker compose version
+      shell: curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r
+      register: compose_version
+
+    - set_fact:
+        compose_version: "{{ compose_version.stdout }}"
+
+    - name: Install docker-compose
+      get_url:
+        url : https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '+x'

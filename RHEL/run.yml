@@ -1,6 +1,6 @@
 ---
 - name: Print linux distribution and version
-  hosts: all
+  hosts: targets
   tasks:
     - name: Running the playbook on the following OS
       debug:
