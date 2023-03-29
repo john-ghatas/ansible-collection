@@ -30,7 +30,6 @@
           - mlocate
           - fail2ban
           - htop
-          - podman-docker
           - jq
           - wget
         state: present
@@ -48,3 +47,24 @@
         url : https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
         dest: /usr/local/bin/docker-compose
         mode: '+x'
+
+    - name: Install docker
+      shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      args:
+        creates: /etc/yum.repos.d/docker-ce.repo
+    
+
+    - name: Ensure the dummy docker package is not installed and install the docker packages required
+      dnf:
+        name:
+          - docker
+        state: absent
+        update_cache: true
+
+    - dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true

@@ -12,3 +12,4 @@
         - nginx
         - cockpit
         - cockpit.socket
+        - docker
