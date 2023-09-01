@@ -17,3 +17,9 @@ sudo dnf install ansible
 ```bash
 pip install ansible
 ```
+
+
+## Running a playbook
+```bash
+ansible-playbook -i inventory -K run.yml -e "ansible_user=<remote_user>"
+```

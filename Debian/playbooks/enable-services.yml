@@ -1,0 +1,13 @@
+---
+- name: "Enable the needed services"
+  hosts: targets
+  become: true
+  tasks:
+    - name: Enable nginx and docker and start the services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - nginx
+        - docker
