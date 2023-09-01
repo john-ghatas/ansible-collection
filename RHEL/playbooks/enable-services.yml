@@ -4,7 +4,7 @@
   become: true
   tasks:
     - name: Enable nginx and cockpit and start the services
-      systemd:
+      ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: true
         state: started

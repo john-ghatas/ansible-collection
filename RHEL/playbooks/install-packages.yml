@@ -4,19 +4,19 @@
   become: true
   tasks:
     - name: Enable the EPEL repository
-      dnf:
+      ansible.builtin.dnf:
         name:
           - epel-release
         state: present
         update_cache: true
-    
+
     - name: Yum update the system
-      dnf:
+      ansible.builtin.dnf:
         name: "*"
         state: latest
 
     - name: Ensure packages are installed
-      dnf:
+      ansible.builtin.dnf:
         name:
           - ansible
           - neofetch
@@ -36,32 +36,34 @@
         update_cache: true
 
     - name: Get the latest docker compose version
-      shell: curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r
+      ansible.builtin.shell: curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r
       register: compose_version
 
-    - set_fact:
+    - name: Save the latest Docker Compose version
+      ansible.builtin.set_fact:
         compose_version: "{{ compose_version.stdout }}"
 
     - name: Install docker-compose
-      get_url:
-        url : https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
+      ansible.builtin.get_url:
+        url: https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
         dest: /usr/local/bin/docker-compose
         mode: '+x'
 
     - name: Install docker
-      shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      ansible.builtin.shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
       args:
         creates: /etc/yum.repos.d/docker-ce.repo
-    
+
 
     - name: Ensure the dummy docker package is not installed and install the docker packages required
-      dnf:
+      ansible.builtin.dnf:
         name:
           - docker
         state: absent
         update_cache: true
 
-    - dnf:
+    - name: Install the docker packages
+      ansible.builtin.dnf:
         name:
           - docker-ce
           - docker-ce-cli

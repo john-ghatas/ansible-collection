@@ -4,7 +4,7 @@
   become: true
   tasks:
     - name: Allow https and http traffic
-      firewalld:
+      ansible.posix.firewalld:
         zone: public
         service: "{{ item }}"
         permanent: true
@@ -15,6 +15,6 @@
         - cockpit
 
     - name: Reload firewalld
-      systemd:
+      ansible.builtin.systemd:
         name: firewalld
         state: reloaded
