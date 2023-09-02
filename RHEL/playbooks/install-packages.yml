@@ -19,6 +19,7 @@
       ansible.builtin.dnf:
         name:
           - ansible
+          - distrobox
           - neofetch
           - git
           - vim
@@ -32,41 +33,5 @@
           - htop
           - jq
           - wget
-        state: present
-        update_cache: true
-
-    - name: Get the latest docker compose version
-      ansible.builtin.shell: curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r
-      register: compose_version
-
-    - name: Save the latest Docker Compose version
-      ansible.builtin.set_fact:
-        compose_version: "{{ compose_version.stdout }}"
-
-    - name: Install docker-compose
-      ansible.builtin.get_url:
-        url: https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
-        dest: /usr/local/bin/docker-compose
-        mode: '+x'
-
-    - name: Install docker
-      ansible.builtin.shell: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-      args:
-        creates: /etc/yum.repos.d/docker-ce.repo
-
-
-    - name: Ensure the dummy docker package is not installed and install the docker packages required
-      ansible.builtin.dnf:
-        name:
-          - docker
-        state: absent
-        update_cache: true
-
-    - name: Install the docker packages
-      ansible.builtin.dnf:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
         state: present
         update_cache: true
