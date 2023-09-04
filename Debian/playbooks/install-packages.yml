@@ -12,6 +12,9 @@
       ansible.builtin.apt:
         name:
           - ufw
+          - gnupg
+          - vim
+          - neovim
           - apt-transport-https
           - ca-certificates
           - nginx

@@ -35,23 +35,10 @@
         owner: root
         group: root
 
-    - name: Download docker armored signature
-      ansible.builtin.get_url:
-        url: https://download.docker.com/linux/debian/gpg
-        dest: /tmp/docker.asc
-        mode: 700
-      when: not docker_gpg.stat.exists
-      changed_when: not docker_gpg.stat.exists
-
-    - name: Dearmor docker asc
-      ansible.builtin.command: /usr/bin/gpg --dearmor -o /etc/apt/keyrings/docker.gpg /tmp/docker.asc
-      when: not docker_gpg.stat.exists
-      changed_when: not docker_gpg.stat.exists
-
-    - name: Delete temporary location armored signature
-      ansible.builtin.file:
-        state: absent
-        path: /tmp/docker.asc
+    - name: Add Docker GPG apt Key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
 
     - name: Add docker apt repository.
       ansible.builtin.apt_repository:
