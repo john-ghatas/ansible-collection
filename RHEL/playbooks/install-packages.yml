@@ -20,6 +20,7 @@
         name:
           - ansible
           - distrobox
+          - htop
           - neofetch
           - git
           - vim

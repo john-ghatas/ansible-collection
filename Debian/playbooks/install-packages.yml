@@ -13,6 +13,7 @@
         name:
           - ufw
           - gnupg
+          - htop
           - vim
           - neovim
           - apt-transport-https
