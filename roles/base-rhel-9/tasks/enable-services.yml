@@ -1,7 +1,0 @@
----
-- name: Enable nginx and cockpit and start the services
-  systemd:
-    name: "{{ item }}"
-    enabled: true
-    state: started
-  loop: "{{ enabled_services }}"

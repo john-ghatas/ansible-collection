@@ -20,6 +20,14 @@ pip install ansible
 
 
 ## Running a playbook
+Retrieve the roles from GIT
 ```bash
-ansible-playbook -i inventory -K run.yml -e "ansible_user=<remote_user>"
+ansible-galaxy install -r requirements.yml -p roles/
+```
+
+
+Run the playbook
+```bash
+cd <dir>
+ansible-playbook -i inventory -K basic-setup.yml -e "ansible_user=<remote_user>"
 ```

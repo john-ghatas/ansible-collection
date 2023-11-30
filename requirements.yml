@@ -1,0 +1,6 @@
+---    
+- src: https://github.com/jg-ansible/base-rhel-9.git
+  version: 1.0.0
+
+- src: https://github.com/jg-ansible/base-debian-12
+  version: 1.0.0
