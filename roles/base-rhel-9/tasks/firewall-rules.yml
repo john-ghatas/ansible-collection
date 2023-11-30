@@ -1,0 +1,13 @@
+---
+- name: Allow https and http traffic
+  firewalld:
+    zone: public
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop: "{{ firewall_services }}"
+
+- name: Reload firewalld
+  systemd:
+    name: firewalld
+    state: reloaded

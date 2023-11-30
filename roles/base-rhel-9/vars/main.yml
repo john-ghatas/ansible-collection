@@ -1,0 +1,12 @@
+---
+enabled_services:
+  - nginx
+  - cockpit
+  - cockpit.socket
+  - docker
+
+firewall_services:
+  - ssh
+  - http
+  - https
+  - cockpit

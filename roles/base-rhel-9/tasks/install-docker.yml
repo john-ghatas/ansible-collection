@@ -1,0 +1,60 @@
+---
+- name: Get the latest docker compose version
+  shell: |
+    set -o pipefail
+    curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r
+  args:
+    executable: /bin/bash
+  register: compose_version
+  changed_when: compose_version.stdout != 0
+
+- name: Save the latest Docker Compose version
+  set_fact:
+    compose_version: "{{ compose_version.stdout }}"
+
+- name: Install docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '+x'
+
+- name: Check for existing docker repo
+  stat:
+    path: /etc/yum.repos.d/docker-ce.repo
+  register: dockerrepo
+
+- name: Install the docker repo
+  shell: |
+    set -o pipefail
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    executable: /bin/bash
+    creates: /etc/yum.repos.d/docker-ce.repo
+  when: not dockerrepo.stat.exists
+
+- name: Ensure the dummy docker package is not installed and install the docker packages required
+  dnf:
+    name:
+      - docker
+    state: absent
+    update_cache: true
+
+- name: Install the docker packages
+  dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+- name: Add all users in the sudo group to the docker group
+  shell: |
+    set -o pipefail
+    for user in $(grep 'wheel' /etc/group | cut -d ":" -f 4- | tr "," "\n"); do usermod -aG docker $user; done
+  register: docker_users
+  changed_when: docker_users.rc != 0
+  args:
+    executable: /bin/bash

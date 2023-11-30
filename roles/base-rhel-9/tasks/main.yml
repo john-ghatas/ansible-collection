@@ -1,0 +1,9 @@
+---
+- name: Running the playbook on the following OS
+  debug:
+    msg:
+      - "{{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+
+- name: Run the basic setup
+  include_tasks: ./total.yml
+  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux', 'Rocky', 'Alma']

@@ -1,9 +1,0 @@
----
-- name: Install the base packages
-  import_playbook: install-packages.yml
-- name: Install docker
-  import_playbook: install-docker.yml
-- name: Set the base firewall rules
-  import_playbook: firewall-rules.yml
-- name: Enable the required services
-  import_playbook: enable-services.yml

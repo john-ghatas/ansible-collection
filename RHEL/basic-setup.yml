@@ -1,0 +1,8 @@
+- name: Setup basic RHEL 9 system
+  hosts: targets
+  become: true
+
+  tasks:
+    - name: Run the basic setup
+      import_role:
+        name: base-rhel-9

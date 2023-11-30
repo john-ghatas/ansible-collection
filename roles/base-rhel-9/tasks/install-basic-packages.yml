@@ -1,0 +1,32 @@
+---
+- name: Enable the EPEL repository
+  dnf:
+    name:
+      - epel-release
+    state: present
+    update_cache: true
+- name: Update the system
+  dnf:
+    name: "*"
+    state: latest
+- name: Ensure packages are installed
+  dnf:
+    name:
+      - ansible
+      - distrobox
+      - htop
+      - neofetch
+      - git
+      - vim
+      - zsh
+      - nginx
+      - cockpit
+      - cockpit-pcp
+      - neovim
+      - mlocate
+      - fail2ban
+      - htop
+      - jq
+      - wget
+    state: present
+    update_cache: true

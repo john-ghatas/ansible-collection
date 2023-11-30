@@ -1,9 +1,0 @@
----
-- name: Install the generic packages
-  ansible.builtin.import_playbook: install-packages.yml
-- name: Install all packages regarding Docker
-  ansible.builtin.import_playbook: install-docker.yml
-- name: Apply the firewall rules
-  import_playbook: firewall-rules.yml
-- name: Enable all services
-  import_playbook: enable-services.yml
