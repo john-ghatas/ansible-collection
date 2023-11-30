@@ -1,0 +1,60 @@
+- name: Get the latest docker compose version
+  shell: |
+    set -o pipefail
+    curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r
+  args:
+    executable: /bin/bash
+  register: compose_version
+  changed_when: compose_version.stdout != 0
+
+- name: Extract docker-compose version from the output
+  set_fact:
+    compose_version: "{{ compose_version.stdout }}"
+
+- name: Install docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ compose_version }}/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '+x'
+
+- name: Check if docker key exists
+  stat:
+    path: /etc/apt/keyrings/docker.gpg
+  register: docker_gpg
+
+- name: Create APT keyring directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add docker apt repository.
+  apt_repository:
+    repo: "deb [arch=amd64,signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+
+- name: Install Docker
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+- name: Add all users in the sudo group to the docker group
+  shell: |
+    set -o pipefail
+    for user in $(grep 'sudo' /etc/group | cut -d ":" -f 4- | tr "," "\n"); do usermod -aG docker $user; done
+  register: docker_users
+  changed_when: docker_users.rc != 0
+  args:
+    executable: /bin/bash

@@ -1,0 +1,5 @@
+---
+- include_tasks: ./install-packages.yml
+- include_tasks: ./install-docker.yml
+- include_tasks: ./enable-services.yml
+- include_tasks: ./firewall-rules.yml

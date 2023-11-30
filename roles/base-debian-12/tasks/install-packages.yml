@@ -1,0 +1,24 @@
+- name: APT update the system
+  apt:
+    upgrade: true
+    update_cache: true
+
+- name: Ensure basic packages are installed
+  apt:
+    name:
+      - ufw
+      - gnupg
+      - htop
+      - vim
+      - neovim
+      - apt-transport-https
+      - ca-certificates
+      - nginx
+      - zsh
+      - curl
+      - lsb-release
+      - wget
+      - gnupg
+      - gpg
+      - jq
+    state: present

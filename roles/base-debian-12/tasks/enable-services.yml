@@ -1,0 +1,7 @@
+---
+- name: Enable nginx and docker and start the services
+  systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop: "{{ services }}"
