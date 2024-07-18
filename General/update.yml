@@ -1,0 +1,14 @@
+- name: Update and reboot systems
+  hosts: targets
+  become: true
+
+  tasks:
+    - name: "Update using APT"
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+      when: ansible_distribution == "Debian"
+
+    - name: Reboot the updated hosts
+      ansible.builtin.reboot:
+        boot_time_command: uptime
