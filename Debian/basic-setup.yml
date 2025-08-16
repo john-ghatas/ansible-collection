@@ -6,3 +6,16 @@
     - name: Run the basic setup
       import_role:
         name: base-debian-12
+
+    - name: Install Docker
+      import_role:
+        name: ansible-role-docker
+
+    - name: Add all non-privileged users to the Docker group
+      shell: |
+        set -o pipefail
+        for user in $(grep 'sudo' /etc/group | cut -d ":" -f 4- | tr "," "\n"); do usermod -aG docker $user; done
+      register: docker_users
+      changed_when: docker_users.rc != 0
+      args:
+        executable: /bin/bash
